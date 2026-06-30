@@ -1,0 +1,28 @@
+#! /usr/bin/env bash
+set -e
+SCRIPT_DIR="$(dirname "$0")"
+
+if [ "$#" -eq 1 ]; then
+    echo "No bucket name provided Getting Latest Bucket..."
+
+    BUCKET_NAME=$("$SCRIPT_DIR/list-buckets" 1)
+    echo "Using latest bucket: $BUCKET_NAME"
+    FILENAME=$1
+    
+else
+    BUCKET_NAME=$1
+    FILENAME=$2
+fi
+
+# Check for Filename
+if [ -z "$FILENAME" ]; then
+    echo "No FileName provided eg. test.txt"
+    exit 1
+fi
+
+OBJECT_KEY=$(basename "$FILENAME")
+
+aws s3api put-object \
+--bucket $BUCKET_NAME \
+--body $FILENAME \
+--key $OBJECT_KEY

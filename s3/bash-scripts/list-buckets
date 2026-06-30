@@ -1,0 +1,6 @@
+#! /usr/bin/env bash
+
+LIMIT=${1:-2}
+
+#Sorting by creation date asc, reversing so it becomes desc, Getting the amount of buckets specified (2 by default).
+aws s3api list-buckets --query "reverse(sort_by(Buckets,&CreationDate))[].Name | [:${LIMIT}]" --output text
